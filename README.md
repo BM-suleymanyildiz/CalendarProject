@@ -104,7 +104,7 @@ Kullanıcıların:
 
 <img width="1920" height="1012" alt="event_delete" src="https://github.com/user-attachments/assets/4584e3b7-b83b-4e7c-8ce4-64797fd782c4" />
 
-<img width="1920" height="2053" alt="category_list" src="https://github.com/user-attachments/assets/5e9dae58-0f74-403e-80bb-21174ebcc009" />
+<img width="1920" height="1647" alt="category_list" src="https://github.com/user-attachments/assets/9b7cf6c5-9be7-485e-a05d-ec600769ebb9" />
 
 <img width="1920" height="931" alt="category_create" src="https://github.com/user-attachments/assets/62c6de18-8e51-42f6-bdb1-45d193e969cd" />
 
