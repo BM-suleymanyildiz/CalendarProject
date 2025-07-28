@@ -1,4 +1,4 @@
-#📅 Calendar Project - AI Destekli Takvim Uygulaması 🤖
+# 📅 Calendar Project - AI Destekli Takvim Uygulaması 🤖
 
 Yapay zeka ile güçlendirilmiş, modern ve kullanıcı dostu takvim uygulaması.  
 Bu proje, **ASP.NET MVC 5** altyapısı ve **Entity Framework 6 Code First** mimarisi ile geliştirilmiş olup, kullanıcıların etkinliklerini planlayabileceği, kategorilere ayırabileceği ve yapay zeka desteği ile öneriler alabileceği zengin özelliklere sahip bir web tabanlı takvim sistemidir.
