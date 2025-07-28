@@ -13,6 +13,58 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
+# Security and sensitive files
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+*.cert
+secrets.json
+appsettings.Production.json
+appsettings.Development.json
+*.env
+.env.local
+.env.production
+.env.development
+
+# Database files
+*.mdf
+*.ldf
+*.ndf
+*.db
+*.sqlite
+*.sqlite3
+
+# Log files
+*.log
+logs/
+Logs/
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+Temp/
+tmp/
+Tmp/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
 # Mono auto generated files
 mono_crash.*
 

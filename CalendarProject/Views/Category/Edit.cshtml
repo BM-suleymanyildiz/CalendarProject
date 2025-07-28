@@ -5,7 +5,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!-- Content Header (Page header) -->
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -16,7 +15,6 @@
     </div>
 </section>
 
-<!-- Main content -->
 <section class="content">
     <div class="container-fluid">
         <div class="row">
@@ -57,7 +55,6 @@
                                 @Html.ValidationMessageFor(model => model.Color, "", new { @class = "text-danger" })
                             </div>
 
-                            <!-- Mevcut Renk Önizlemesi -->
                             <div class="form-group">
                                 <label class="control-label">Mevcut Renk Önizlemesi</label>
                                 <div class="d-flex align-items-center">
@@ -90,7 +87,6 @@
     
     <script>
         $(document).ready(function() {
-            // Renk değiştiğinde önizlemeyi güncelle
             $('#Color').on('input', function() {
                 var color = $(this).val();
                 $('#colorPreview').css('background-color', color);

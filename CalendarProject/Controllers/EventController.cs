@@ -12,14 +12,12 @@ namespace CalendarProject.Controllers
     {
         private ProjectContext db = new ProjectContext();
 
-        // GET: Event
         public ActionResult Index()
         {
             var events = db.Events.Include("Category").ToList();
             return View(events);
         }
 
-        // GET: Event/Create
         public ActionResult Create()
         {
             try
@@ -30,13 +28,11 @@ namespace CalendarProject.Controllers
             }
             catch (Exception ex)
             {
-                // Hata durumunda boş liste döndür
                 ViewBag.Categories = new SelectList(new List<Category>(), "Id", "Name");
                 return View();
             }
         }
 
-        // POST: Event/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Title,StartDate,EndDate,Description,CategoryId,IsAllDay")] Event eventItem)
@@ -61,7 +57,6 @@ namespace CalendarProject.Controllers
             }
         }
 
-        // GET: Event/Edit/5
         public ActionResult Edit(int id)
         {
             try
@@ -87,7 +82,6 @@ namespace CalendarProject.Controllers
             }
         }
 
-        // POST: Event/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Title,StartDate,EndDate,Description,CategoryId,IsAllDay")] Event eventItem)
@@ -112,30 +106,42 @@ namespace CalendarProject.Controllers
             }
         }
 
-        // GET: Event/Delete/5
         public ActionResult Delete(int id)
         {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+                }
+                Event eventItem = db.Events.Find(id);
+                if (eventItem == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(eventItem);
             }
-            Event eventItem = db.Events.Find(id);
-            if (eventItem == null)
+            catch (Exception ex)
             {
-                return HttpNotFound();
+                return View();
             }
-            return View(eventItem);
         }
 
-        // POST: Event/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Event eventItem = db.Events.Find(id);
-            db.Events.Remove(eventItem);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                Event eventItem = db.Events.Find(id);
+                db.Events.Remove(eventItem);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Index");
+            }
         }
 
         protected override void Dispose(bool disposing)

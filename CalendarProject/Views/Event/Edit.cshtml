@@ -4,7 +4,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!-- Content Header (Page header) -->
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -13,10 +12,10 @@
             </div>
 
         </div>
-    </div><!-- /.container-fluid -->
+    </div>
 </section>
 
-<!-- Main content -->
+<section class="content">
 <section class="content">
     <div class="container-fluid">
         <div class="row">
@@ -104,7 +103,6 @@
                                 </div>
                             </div>
                             
-                            <!-- Mevcut Etkinlik Bilgileri -->
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="alert alert-info">
@@ -153,13 +151,9 @@
     
     <script>
         $(document).ready(function() {
-            // Tüm gün checkbox'ı değiştiğinde
             $('#IsAllDay').change(function() {
-                // Artık her zaman sadece tarih kullanıyoruz
-                // Bu fonksiyon şimdilik boş bırakıldı
             });
             
-            // Başlangıç tarihi değiştiğinde bitiş tarihini güncelle
             $('#StartDate').change(function() {
                 var startDate = $(this).val();
                 if (startDate) {
@@ -167,7 +161,6 @@
                 }
             });
             
-            // Form gönderilmeden önce validasyon
             $('form').submit(function(e) {
                 var startDate = new Date($('#StartDate').val());
                 var endDate = new Date($('#EndDate').val());

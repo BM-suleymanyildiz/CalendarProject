@@ -12,20 +12,17 @@ namespace CalendarProject.Controllers
     {
         private ProjectContext db = new ProjectContext();
 
-      
         public ActionResult Index()
         {
             var categories = db.Categories.ToList();
             return View(categories);
         }
 
- 
         public ActionResult Create()
         {
             return View();
         }
 
-    
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name,Description,Color")] Category category)
@@ -53,7 +50,6 @@ namespace CalendarProject.Controllers
             return View(category);
         }
 
-  
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -78,7 +74,6 @@ namespace CalendarProject.Controllers
             return View(category);
         }
 
-      
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Name,Description,Color")] Category category)

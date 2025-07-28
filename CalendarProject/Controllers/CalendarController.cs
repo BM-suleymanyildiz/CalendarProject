@@ -6,6 +6,11 @@ using System.Web.Mvc;
 using System.Data.Entity;
 using CalendarProject.Context;
 using CalendarProject.Entities;
+using System.Threading.Tasks;
+using System.Net.Http;
+using System.Text;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace CalendarProject.Controllers
 {
@@ -13,7 +18,6 @@ namespace CalendarProject.Controllers
     {
         private ProjectContext db = new ProjectContext();
 
-        // GET: Calendar
         public ActionResult Index()
         {
             var events = db.Events.ToList();
@@ -23,26 +27,22 @@ namespace CalendarProject.Controllers
             return View(events);
         }
 
-        // GET: Calendar/Test
         public ActionResult Test()
         {
             return View();
         }
 
-        // GET: Calendar/GetEvents
         [HttpGet]
         public JsonResult GetEvents()
         {
             try
             {
-                // Debug: Veritabanındaki etkinlik sayısını kontrol et
                 var totalEvents = db.Events.Count();
                 System.Diagnostics.Debug.WriteLine($"Toplam etkinlik sayısı: {totalEvents}");
                 
-                // Sadece geçerli tarihi olan etkinlikleri getir (null olmayan)
                 var events = db.Events.Include("Category")
                     .Where(e => e.StartDate.HasValue && e.EndDate.HasValue)
-                    .ToList() // Önce veritabanından çek
+                    .ToList()
                     .Select(e => new
                     {
                         id = e.Id,
@@ -58,7 +58,6 @@ namespace CalendarProject.Controllers
 
                 System.Diagnostics.Debug.WriteLine($"Döndürülen etkinlik sayısı: {events.Count}");
                 
-                // Her etkinliği debug et
                 foreach (var evt in events)
                 {
                     System.Diagnostics.Debug.WriteLine($"Etkinlik: {evt.title}, Başlangıç: {evt.start}, Bitiş: {evt.end}, Renk: {evt.backgroundColor}");
@@ -73,13 +72,11 @@ namespace CalendarProject.Controllers
             }
         }
 
-        // GET: Calendar/GetExternalEvents - Tarihi olmayan etkinlikleri getir
         [HttpGet]
         public JsonResult GetExternalEvents()
         {
             try
             {
-                // Sadece tarihi olmayan etkinlikleri getir (null olan)
                 var events = db.Events.Include("Category")
                     .Where(e => !e.StartDate.HasValue && !e.EndDate.HasValue)
                     .Select(e => new
@@ -103,137 +100,79 @@ namespace CalendarProject.Controllers
             }
         }
 
-        // POST: Calendar/CreateEventWithoutDate - Tarih olmadan etkinlik oluştur
         [HttpPost]
         public JsonResult CreateEventWithoutDate(string Title, string Description, int? CategoryId, bool IsAllDay)
         {
             try
             {
-                System.Diagnostics.Debug.WriteLine("CreateEventWithoutDate çağrıldı");
-                System.Diagnostics.Debug.WriteLine($"Title: {Title}");
-                System.Diagnostics.Debug.WriteLine($"Description: {Description}");
-                System.Diagnostics.Debug.WriteLine($"CategoryId: {CategoryId}");
-                System.Diagnostics.Debug.WriteLine($"IsAllDay: {IsAllDay}");
-                
-                if (string.IsNullOrEmpty(Title))
-                {
-                    System.Diagnostics.Debug.WriteLine("Title boş");
-                    return Json(new { success = false, message = "Etkinlik başlığı boş olamaz" });
-                }
-
-                // Tarih olmadan etkinlik oluştur
                 var newEvent = new Event
                 {
                     Title = Title,
-                    Description = Description ?? "",
+                    Description = Description,
                     CategoryId = CategoryId,
                     IsAllDay = IsAllDay,
-                    StartDate = null, // Tarih yok
-                    EndDate = null    // Tarih yok
+                    StartDate = null,
+                    EndDate = null
                 };
 
                 db.Events.Add(newEvent);
                 db.SaveChanges();
 
-                System.Diagnostics.Debug.WriteLine($"Etkinlik oluşturuldu. ID: {newEvent.Id}");
-
-                return Json(new { 
-                    success = true, 
-                    id = newEvent.Id,
-                    title = newEvent.Title,
-                    description = newEvent.Description,
-                    categoryId = newEvent.CategoryId,
-                    isAllDay = newEvent.IsAllDay
-                });
+                return Json(new { success = true, id = newEvent.Id });
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"CreateEventWithoutDate hatası: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
                 return Json(new { success = false, message = ex.Message });
             }
         }
 
-        // POST: Calendar/UpdateEventDate - Etkinlik tarihini güncelle
         [HttpPost]
         public JsonResult UpdateEventDate(int eventId, string startDate, string endDate)
         {
             try
             {
-                System.Diagnostics.Debug.WriteLine($"UpdateEventDate çağrıldı - EventId: {eventId}, StartDate: {startDate}, EndDate: {endDate}");
-                
-                if (eventId <= 0)
-                {
-                    return Json(new { success = false, message = "Geçersiz etkinlik ID'si" });
-                }
-
-                var existingEvent = db.Events.Find(eventId);
-                if (existingEvent == null)
+                var eventItem = db.Events.Find(eventId);
+                if (eventItem == null)
                 {
                     return Json(new { success = false, message = "Etkinlik bulunamadı" });
                 }
 
-                System.Diagnostics.Debug.WriteLine($"Mevcut etkinlik bulundu: {existingEvent.Title}");
-
-                // Tarihleri parse et ve güncelle
-                DateTime parsedStartDate, parsedEndDate;
-                if (DateTime.TryParse(startDate, out parsedStartDate) && DateTime.TryParse(endDate, out parsedEndDate))
+                DateTime startDateTime, endDateTime;
+                if (DateTime.TryParse(startDate, out startDateTime) && DateTime.TryParse(endDate, out endDateTime))
                 {
-                    existingEvent.StartDate = parsedStartDate;
-                    existingEvent.EndDate = parsedEndDate;
-                    
-                    System.Diagnostics.Debug.WriteLine($"Tarihler güncellendi: {parsedStartDate} - {parsedEndDate}");
+                    eventItem.StartDate = startDateTime;
+                    eventItem.EndDate = endDateTime;
+                    db.SaveChanges();
+
+                    return Json(new { success = true });
                 }
                 else
                 {
-                    System.Diagnostics.Debug.WriteLine($"Tarih parse hatası: {startDate}, {endDate}");
                     return Json(new { success = false, message = "Geçersiz tarih formatı" });
                 }
-
-                db.SaveChanges();
-                System.Diagnostics.Debug.WriteLine("Veritabanı güncellendi");
-
-                return Json(new { success = true });
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"UpdateEventDate hatası: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
                 return Json(new { success = false, message = ex.Message });
             }
         }
 
-        // POST: Calendar/CreateEvent
         [HttpPost]
         public JsonResult CreateEvent(Event eventItem)
         {
             try
             {
-                if (eventItem == null)
-                {
-                    return Json(new { success = false, message = "Event verisi boş olamaz" });
-                }
-
-                if (string.IsNullOrEmpty(eventItem.Title))
-                {
-                    return Json(new { success = false, message = "Etkinlik başlığı boş olamaz" });
-                }
-
-                if (!eventItem.CategoryId.HasValue || eventItem.CategoryId.Value <= 0)
-                {
-                    return Json(new { success = false, message = "Geçerli bir kategori seçilmedi" });
-                }
-
                 if (ModelState.IsValid)
                 {
                     db.Events.Add(eventItem);
                     db.SaveChanges();
-
                     return Json(new { success = true, id = eventItem.Id });
                 }
-
-                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return Json(new { success = false, message = "Model validation hatası", errors = errors });
+                else
+                {
+                    var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                    return Json(new { success = false, message = string.Join(", ", errors) });
+                }
             }
             catch (Exception ex)
             {
@@ -241,43 +180,36 @@ namespace CalendarProject.Controllers
             }
         }
 
-        // POST: Calendar/UpdateEvent
         [HttpPost]
         public JsonResult UpdateEvent(Event eventItem)
         {
             try
             {
-                if (eventItem == null)
+                if (ModelState.IsValid)
                 {
-                    return Json(new { success = false, message = "Event verisi boş olamaz" });
-                }
+                    var existingEvent = db.Events.Find(eventItem.Id);
+                    if (existingEvent != null)
+                    {
+                        existingEvent.Title = eventItem.Title;
+                        existingEvent.Description = eventItem.Description;
+                        existingEvent.StartDate = eventItem.StartDate;
+                        existingEvent.EndDate = eventItem.EndDate;
+                        existingEvent.CategoryId = eventItem.CategoryId;
+                        existingEvent.IsAllDay = eventItem.IsAllDay;
 
-                if (eventItem.Id <= 0)
+                        db.SaveChanges();
+                        return Json(new { success = true });
+                    }
+                    else
+                    {
+                        return Json(new { success = false, message = "Etkinlik bulunamadı" });
+                    }
+                }
+                else
                 {
-                    return Json(new { success = false, message = "Geçersiz Event ID" });
+                    var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                    return Json(new { success = false, message = string.Join(", ", errors) });
                 }
-
-                var existingEvent = db.Events.Find(eventItem.Id);
-                if (existingEvent == null)
-                {
-                    return Json(new { success = false, message = "Etkinlik bulunamadı" });
-                }
-
-                // Etkinliği güncelle
-                existingEvent.Title = eventItem.Title;
-                existingEvent.StartDate = eventItem.StartDate;
-                existingEvent.EndDate = eventItem.EndDate;
-                existingEvent.Description = eventItem.Description;
-                existingEvent.IsAllDay = eventItem.IsAllDay;
-
-                // Kategori ID'si varsa güncelle
-                if (eventItem.CategoryId.HasValue && eventItem.CategoryId.Value > 0)
-                {
-                    existingEvent.CategoryId = eventItem.CategoryId.Value;
-                }
-
-                db.SaveChanges();
-                return Json(new { success = true });
             }
             catch (Exception ex)
             {
@@ -285,7 +217,6 @@ namespace CalendarProject.Controllers
             }
         }
 
-        // GET: Calendar/GetCategoryColor
         [HttpGet]
         public JsonResult GetCategoryColor(int categoryId)
         {
@@ -296,7 +227,10 @@ namespace CalendarProject.Controllers
                 {
                     return Json(new { success = true, color = category.Color }, JsonRequestBehavior.AllowGet);
                 }
-                return Json(new { success = false, message = "Kategori bulunamadı" }, JsonRequestBehavior.AllowGet);
+                else
+                {
+                    return Json(new { success = false, message = "Kategori bulunamadı" }, JsonRequestBehavior.AllowGet);
+                }
             }
             catch (Exception ex)
             {
@@ -304,31 +238,104 @@ namespace CalendarProject.Controllers
             }
         }
 
-        // POST: Calendar/DeleteEvent
         [HttpPost]
         public JsonResult DeleteEvent(int id)
         {
             try
             {
-                if (id <= 0)
-                {
-                    return Json(new { success = false, message = "Geçersiz etkinlik ID'si" });
-                }
-
                 var eventItem = db.Events.Find(id);
-                if (eventItem == null)
+                if (eventItem != null)
+                {
+                    db.Events.Remove(eventItem);
+                    db.SaveChanges();
+                    return Json(new { success = true });
+                }
+                else
                 {
                     return Json(new { success = false, message = "Etkinlik bulunamadı" });
                 }
-
-                db.Events.Remove(eventItem);
-                db.SaveChanges();
-
-                return Json(new { success = true });
             }
             catch (Exception ex)
             {
                 return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> ChatWithAI(string message)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var apiKey = System.Configuration.ConfigurationManager.AppSettings["RapidAPIKey"];
+                    var apiHost = System.Configuration.ConfigurationManager.AppSettings["RapidAPIHost"];
+                    
+                    var request = new HttpRequestMessage
+                    {
+                        Method = HttpMethod.Post,
+                        RequestUri = new Uri("https://chatgpt-42.p.rapidapi.com/conversationgpt4"),
+                        Headers =
+                        {
+                            { "x-rapidapi-key", apiKey },
+                            { "x-rapidapi-host", apiHost },
+                        },
+                        Content = new StringContent(JsonConvert.SerializeObject(new
+                        {
+                            messages = new[]
+                            {
+                                new { role = "user", content = message }
+                            },
+                            system_prompt = "Sen bir takvim uygulamasının AI asistanısın. Türkçe yanıt ver ve takvim, etkinlik yönetimi konularında yardımcı ol. Kısa ve öz yanıtlar ver.",
+                            temperature = 0.9,
+                            top_k = 5,
+                            top_p = 0.9,
+                            max_tokens = 256,
+                            web_access = false
+                        }), Encoding.UTF8, "application/json")
+                    };
+
+                    using (var response = await client.SendAsync(request))
+                    {
+                        response.EnsureSuccessStatusCode();
+                        var responseContent = await response.Content.ReadAsStringAsync();
+                        
+                        var responseObj = JObject.Parse(responseContent);
+                        
+                        string aiResponse = "";
+                        
+                        if (responseObj["result"] != null)
+                        {
+                            aiResponse = responseObj["result"].ToString();
+                        }
+                        else if (responseObj["choices"] != null)
+                        {
+                            var choices = responseObj["choices"];
+                            if (choices.Count() > 0)
+                            {
+                                aiResponse = choices[0]["message"]["content"].ToString();
+                            }
+                        }
+                        else if (responseObj["message"] != null)
+                        {
+                            aiResponse = responseObj["message"].ToString();
+                        }
+                        else if (responseObj["content"] != null)
+                        {
+                            aiResponse = responseObj["content"].ToString();
+                        }
+                        else
+                        {
+                            aiResponse = "Yanıt formatı tanınmadı: " + responseContent;
+                        }
+
+                        return Json(new { success = true, response = aiResponse });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, response = "Hata: " + ex.Message });
             }
         }
 

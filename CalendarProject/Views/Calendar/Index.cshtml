@@ -6,102 +6,10 @@
 }
 
 @section Styles {
-    <!-- fullCalendar -->
     <link rel="stylesheet" href="~/Content/AdminLTE-3.1.0/plugins/fullcalendar/main.css">
-    
-    <style>
-        /* Takvim etkinlik stilleri */
-        .fc-event {
-            cursor: pointer;
-            font-weight: 500;
-            border-radius: 3px;
-            padding: 2px 4px;
-            margin: 1px 0;
-        }
-        
-        .fc-event-title {
-            font-size: 12px;
-            line-height: 1.2;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        
-        /* Etkinlik hover efekti */
-        .fc-event:hover {
-            opacity: 0.8;
-            transform: scale(1.02);
-            transition: all 0.2s ease;
-        }
-        
-                 /* Takvim hücre stilleri */
-         .fc-daygrid-day {
-             min-height: 120px; /* Yüksekliği artırdım */
-         }
-        
-        .fc-daygrid-day-frame {
-            padding: 2px;
-        }
-        
-        /* Etkinlik renk varyasyonları */
-        .fc-event-primary {
-            background-color: #3c8dbc !important;
-            border-color: #3c8dbc !important;
-        }
-        
-        .fc-event-success {
-            background-color: #28a745 !important;
-            border-color: #28a745 !important;
-        }
-        
-        .fc-event-warning {
-            background-color: #ffc107 !important;
-            border-color: #ffc107 !important;
-            color: #212529 !important;
-        }
-        
-        .fc-event-danger {
-            background-color: #dc3545 !important;
-            border-color: #dc3545 !important;
-        }
-        
-        .fc-event-info {
-            background-color: #17a2b8 !important;
-            border-color: #17a2b8 !important;
-        }
-        
-        /* Takvim başlık stilleri */
-        .fc-col-header-cell-cushion {
-            font-weight: 600;
-            color: #495057;
-        }
-        
-        /* Gün hücre stilleri */
-        .fc-daygrid-day-number {
-            font-weight: 500;
-            color: #6c757d;
-        }
-        
-        /* Bugünün vurgulanması */
-        .fc-day-today {
-            background-color: rgba(60, 141, 188, 0.1) !important;
-        }
-        
-        /* Etkinlik metin stilleri */
-        .fc-event-main {
-            font-size: 11px;
-            font-weight: 500;
-            line-height: 1.3;
-        }
-        
-                 /* Çoklu etkinlik durumunda scroll - kaldırıldı */
-         .fc-daygrid-day-events {
-             /* max-height ve overflow kaldırıldı */
-         }
-    </style>
+    <link rel="stylesheet" href="~/Content/calendar-styles.css">
 }
 
-<!-- Content Header (Page header) -->
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -111,40 +19,35 @@
             <div class="col-sm-6">
             </div>
         </div>
-    </div><!-- /.container-fluid -->
+    </div>
 </section>
 
-<!-- Main content -->
 <section class="content">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3">
                 <div class="sticky-top mb-3">
-                                         <div class="card">
-                         <div class="card-header">
-                             <h4 class="card-title">Sürüklenebilir Etkinlikler</h4>
-                         </div>
-                                                 <div class="card-body">
-                             <!-- the events -->
-                             <div id="external-events">
-                                 <div id="external-events-list">
-                                     <!-- Sürüklenebilir etkinlikler buraya gelecek -->
-                                 </div>
-                                 <div class="checkbox" style="margin-top: 15px;">
-                                     <label for="drop-remove">
-                                         <input type="checkbox" id="drop-remove">
-                                         Bıraktıktan sonra kaldır
-                                     </label>
-                                 </div>
-                             </div>
-                         </div>
-                        <!-- /.card-body -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Sürüklenebilir Etkinlikler</h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="external-events">
+                                <div id="external-events-list">
+                                </div>
+                                <div class="checkbox" style="margin-top: 15px;">
+                                    <label for="drop-remove">
+                                        <input type="checkbox" id="drop-remove">
+                                        Bıraktıktan sonra kaldır
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <!-- /.card -->
-                                         <div class="card">
-                         <div class="card-header">
-                             <h3 class="card-title">Etkinlik Oluştur</h3>
-                         </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Etkinlik Oluştur</h3>
+                        </div>
                         <div class="card-body">
                             <form id="event-form">
                                 <div class="form-group">
@@ -177,33 +80,23 @@
                                     </div>
                                 </div>
                                 
-
-                                
                                 <button type="submit" class="btn btn-primary btn-block">Etkinlik Oluştur</button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- /.col -->
             <div class="col-md-9">
                 <div class="card card-primary">
                     <div class="card-body p-0">
-                        <!-- THE CALENDAR -->
                         <div id="calendar"></div>
                     </div>
-                    <!-- /.card-body -->
                 </div>
-                <!-- /.card -->
             </div>
-            <!-- /.col -->
         </div>
-        <!-- /.row -->
-    </div><!-- /.container-fluid -->
+    </div>
 </section>
-<!-- /.content -->
 
-<!-- Etkinlik Detay Modal -->
 <div class="modal fade" id="eventDetailModal" tabindex="-1" role="dialog" aria-labelledby="eventDetailModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -231,47 +124,65 @@
                     <p id="modal-event-date" class="form-control-plaintext"></p>
                 </div>
             </div>
-                         <div class="modal-footer">
-                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                 <button type="button" class="btn btn-primary" id="edit-event-btn">Düzenle</button>
-                 <button type="button" class="btn btn-danger" id="delete-event-btn">Sil</button>
-             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" id="edit-event-btn">Düzenle</button>
+                <button type="button" class="btn btn-danger" id="delete-event-btn">Sil</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="ai-chat-bot">
+    <div class="chat-bubble" id="chatBubble">
+        <i class="fas fa-robot"></i>
+    </div>
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <h5><i class="fas fa-robot"></i> AI Asistan</h5>
+            <button class="chat-close" id="chatClose">&times;</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot">
+                <div class="message-content">
+                    Merhaba! Size nasıl yardımcı olabilirim? 🤖
+                </div>
+            </div>
+        </div>
+        <div class="typing-indicator" id="typingIndicator">
+            AI düşünüyor...
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="Mesajınızı yazın...">
+            <button id="chatSend"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
 </div>
 
 @section scripts {
-    <!-- jQuery UI -->
     <script src="~/Content/AdminLTE-3.1.0/plugins/jquery-ui/jquery-ui.min.js"></script>
-    <!-- fullCalendar 2.2.5 -->
     <script src="~/Content/AdminLTE-3.1.0/plugins/moment/moment.min.js"></script>
     <script src="~/Content/AdminLTE-3.1.0/plugins/fullcalendar/main.js"></script>
     
     <script>
-        // Türkçe locale ayarları
         moment.locale('tr');
         
         $(function () {
 
-            /* initialize the external events
-             -----------------------------------------------------------------*/
             function ini_events(ele) {
                 ele.each(function () {
-                    // make the event draggable using jQuery UI
                     $(this).draggable({
                         zIndex        : 1070,
-                        revert        : true, // will cause the event to go back to its
-                        revertDuration: 0  //  original position after the drag
+                        revert        : true,
+                        revertDuration: 0
                     })
                 })
             }
 
             ini_events($('#external-events div.external-event'))
 
-            // Mevcut sürüklenebilir etkinlikleri yükle
             loadExternalEvents();
 
-            // Sürüklenebilir etkinlikleri yükle fonksiyonu
             function loadExternalEvents() {
                 $.ajax({
                     url: '@Url.Action("GetExternalEvents", "Calendar")',
@@ -280,10 +191,8 @@
                     success: function(data) {
                         console.log('Sürüklenebilir etkinlikler yüklendi:', data);
                         
-                                                 // Mevcut etkinlikleri temizle
-                         $('#external-events-list').empty();
+                        $('#external-events-list').empty();
                         
-                        // Her etkinlik için sürüklenebilir element oluştur
                         data.forEach(function(event) {
                             var eventElement = $('<div />')
                             eventElement.css({
@@ -296,24 +205,21 @@
                                 'cursor'          : 'move'
                             }).addClass('external-event')
                             
-                            // Etkinlik içeriği - sadece başlık
                             eventElement.text(event.title)
                             
-                                                         // Veri özelliklerini sakla
-                             eventElement.data('eventData', {
-                                 id: event.id,
-                                 title: event.title,
-                                 description: event.description,
-                                 categoryId: event.categoryId,
-                                 categoryName: event.categoryName,
-                                 isAllDay: event.isAllDay,
-                                 color: event.backgroundColor
-                             })
+                            eventElement.data('eventData', {
+                                id: event.id,
+                                title: event.title,
+                                description: event.description,
+                                categoryId: event.categoryId,
+                                categoryName: event.categoryName,
+                                isAllDay: event.isAllDay,
+                                color: event.backgroundColor
+                            })
                             
-                                                         $('#external-events-list').append(eventElement)
+                            $('#external-events-list').append(eventElement)
                         })
                         
-                        // Sürüklenebilir özellik ekle
                         ini_events($('#external-events-list div.external-event'))
                     },
                     error: function(xhr, status, error) {
@@ -322,9 +228,6 @@
                 })
             }
 
-            /* initialize the calendar
-             -----------------------------------------------------------------*/
-            //Date for the calendar events (dummy data)
             var date = new Date()
             var d    = date.getDate(),
                 m    = date.getMonth(),
@@ -337,29 +240,24 @@
             var checkbox = document.getElementById('drop-remove');
             var calendarEl = document.getElementById('calendar');
 
-            // initialize the external events
-            // -----------------------------------------------------------------
-
-                         // Orijinal AdminLTE yapısını kullan
-             new Draggable(containerEl, {
-               itemSelector: '.external-event',
-               eventData: function(eventEl) {
-                 // Etkinlik verilerini al
-                 var eventData = $(eventEl).data('eventData');
-                 
-                 return {
-                   title: eventEl.innerText,
-                   backgroundColor: window.getComputedStyle( eventEl ,null).getPropertyValue('background-color'),
-                   borderColor: window.getComputedStyle( eventEl ,null).getPropertyValue('background-color'),
-                   textColor: window.getComputedStyle( eventEl ,null).getPropertyValue('color'),
-                   id: eventData ? eventData.id : null,
-                   description: eventData ? eventData.description : '',
-                   categoryName: eventData ? eventData.categoryName : '',
-                   categoryId: eventData ? eventData.categoryId : null,
-                   isAllDay: eventData ? eventData.isAllDay : false
-                 };
-               }
-             });
+            new Draggable(containerEl, {
+              itemSelector: '.external-event',
+              eventData: function(eventEl) {
+                var eventData = $(eventEl).data('eventData');
+                
+                return {
+                  title: eventEl.innerText,
+                  backgroundColor: window.getComputedStyle( eventEl ,null).getPropertyValue('background-color'),
+                  borderColor: window.getComputedStyle( eventEl ,null).getPropertyValue('background-color'),
+                  textColor: window.getComputedStyle( eventEl ,null).getPropertyValue('color'),
+                  id: eventData ? eventData.id : null,
+                  description: eventData ? eventData.description : '',
+                  categoryName: eventData ? eventData.categoryName : '',
+                  categoryId: eventData ? eventData.categoryId : null,
+                  isAllDay: eventData ? eventData.isAllDay : false
+                };
+              }
+            });
 
             var calendar = new Calendar(calendarEl, {
                 headerToolbar: {
@@ -377,11 +275,9 @@
                 },
                 dayHeaderFormat: { weekday: 'long' },
                 titleFormat: { year: 'numeric', month: 'long' },
-                //Veritabanından etkinlikleri çek
                 events: function(info, successCallback, failureCallback) {
                     console.log('AJAX çağrısı başlatılıyor...');
                     
-                    // Relative URL kullan
                     var url = '@Url.Action("GetEvents", "Calendar")';
                     console.log('URL:', url);
                     
@@ -395,7 +291,6 @@
                             console.log('Veri tipi:', typeof data);
                             console.log('Veri uzunluğu:', data ? data.length : 'undefined');
                             
-                            // Her etkinliği kontrol et
                             if (data && data.length > 0) {
                                 data.forEach(function(event, index) {
                                     console.log(`Etkinlik ${index + 1}:`, event);
@@ -418,9 +313,7 @@
                         }
                     });
                 },
-                // Etkinlik tıklama olayı - modal ile detay göster
                 eventClick: function(info) {
-                    // Etkinlik detaylarını göster
                     var event = info.event;
                     var title = event.title;
                     var description = event.extendedProps.description || '';
@@ -428,12 +321,10 @@
                     var startDate = event.start;
                     var endDate = event.end;
                     
-                    // Modal içeriğini doldur
                     $('#modal-event-title').text(title);
                     $('#modal-event-description').text(description || 'Açıklama yok');
                     $('#modal-event-category').text(categoryName || 'Kategori yok');
                     
-                    // Tarih formatını ayarla
                     var dateText = '';
                     if (startDate) {
                         var start = moment(startDate).format('DD MMMM YYYY');
@@ -446,7 +337,6 @@
                     }
                     $('#modal-event-date').text(dateText);
                     
-                    // Etkinlik ID'si varsa veritabanını güncelle
                     if (event.id) {
                         var startDateStr = moment(startDate).format('YYYY-MM-DD');
                         var endDateStr = moment(endDate || startDate).format('YYYY-MM-DD');
@@ -477,44 +367,35 @@
                         });
                     }
                     
-                                         // Modal'ı göster
-                     $('#eventDetailModal').modal('show');
-                     
-                     // Düzenle butonuna tıklandığında Edit sayfasına yönlendir
-                     $('#edit-event-btn').off('click').on('click', function() {
-                         if (event.id) {
-                             window.location.href = '@Url.Action("Edit", "Event")/' + event.id;
-                         }
-                     });
-                     
-                     // Sil butonuna tıklandığında silme işlemi yap
-                     $('#delete-event-btn').off('click').on('click', function() {
-                         if (event.id) {
-                             window.location.href = '@Url.Action("Delete", "Event")/' + event.id;
-                         }
-                     });
-                 },
+                    $('#eventDetailModal').modal('show');
+                    
+                    $('#edit-event-btn').off('click').on('click', function() {
+                        if (event.id) {
+                            window.location.href = '@Url.Action("Edit", "Event")/' + event.id;
+                        }
+                    });
+                    
+                    $('#delete-event-btn').off('click').on('click', function() {
+                        if (event.id) {
+                            window.location.href = '@Url.Action("Delete", "Event")/' + event.id;
+                        }
+                    });
+                },
                 editable  : true,
-                droppable : true, // this allows things to be dropped onto the calendar !!!
+                droppable : true,
 
-                                drop      : function(info) {
-                    // is the "remove after drop" checkbox checked?
+                drop      : function(info) {
                     if (checkbox.checked) {
-                        // if so, remove the element from the "Draggable Events" list
                         info.draggedEl.parentNode.removeChild(info.draggedEl);
                     }
                 }
             });
 
             calendar.render();
-            // $('#calendar').fullCalendar()
 
-            /* ETKİNLİK EKLEME */
-            // Form submit
             $('#event-form').submit(function (e) {
                 e.preventDefault()
                 
-                // Form verilerini al
                 var title = $('#event-title').val()
                 var description = $('#event-description').val()
                 var category = $('#event-category').val()
@@ -525,7 +406,6 @@
                     return
                 }
 
-                // AJAX ile veritabanına kaydet
                 var requestData = {
                     Title: title,
                     Description: description,
@@ -545,8 +425,7 @@
                         if (response.success) {
                             console.log('Etkinlik başarıyla oluşturuldu:', response);
                             
-                            // Kategori rengini al
-                            var categoryColor = '#3c8dbc' // Varsayılan renk
+                            var categoryColor = '#3c8dbc'
                             if (category) {
                                 var selectedOption = $('#event-category option:selected')
                                 var color = selectedOption.data('color')
@@ -555,7 +434,6 @@
                                 }
                             }
 
-                            // Sürüklenebilir etkinlik oluştur
                             var event = $('<div />')
                             event.css({
                                 'background-color': categoryColor,
@@ -567,30 +445,25 @@
                                 'cursor'          : 'move'
                             }).addClass('external-event')
                             
-                            // Etkinlik içeriği - sadece başlık
                             event.text(title)
                             
-                                                         // Veri özelliklerini sakla
-                             event.data('eventData', {
-                                 id: response.id,
-                                 title: title,
-                                 description: description,
-                                 categoryId: category,
-                                 categoryName: $('#event-category option:selected').text(),
-                                 isAllDay: isAllDay,
-                                 color: categoryColor
-                             })
+                            event.data('eventData', {
+                                id: response.id,
+                                title: title,
+                                description: description,
+                                categoryId: category,
+                                categoryName: $('#event-category option:selected').text(),
+                                isAllDay: isAllDay,
+                                color: categoryColor
+                            })
                             
-                                                         $('#external-events-list').prepend(event)
+                            $('#external-events-list').prepend(event)
 
-                            // Sürüklenebilir özellik ekle
                             ini_events(event)
 
-                            // Formu temizle
                             $('#event-form')[0].reset()
                             
-                                                         // Sürüklenebilir etkinlikleri yeniden yükle
-                             loadExternalEvents()
+                            loadExternalEvents()
                         } else {
                             alert('Hata: ' + response.message)
                         }
@@ -609,6 +482,63 @@
                     }
                 })
             })
+
+            $('#chatBubble').click(function() {
+                $('#chatWindow').toggle();
+            });
+
+            $('#chatClose').click(function() {
+                $('#chatWindow').hide();
+            });
+
+            $('#chatInput').keypress(function(e) {
+                if (e.which == 13) {
+                    sendMessage();
+                }
+            });
+
+            $('#chatSend').click(function() {
+                sendMessage();
+            });
+
+            function sendMessage() {
+                var message = $('#chatInput').val().trim();
+                if (message === '') return;
+
+                addMessage(message, 'user');
+                $('#chatInput').val('');
+
+                $('#typingIndicator').show();
+
+                $.ajax({
+                    url: '@Url.Action("ChatWithAI", "Calendar")',
+                    type: 'POST',
+                    data: {
+                        message: message
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        $('#typingIndicator').hide();
+                        if (response.success) {
+                            addMessage(response.response, 'bot');
+                        } else {
+                            addMessage('Üzgünüm, şu anda yanıt veremiyorum. Lütfen daha sonra tekrar deneyin.', 'bot');
+                        }
+                    },
+                    error: function() {
+                        $('#typingIndicator').hide();
+                        addMessage('Bağlantı hatası oluştu. Lütfen daha sonra tekrar deneyin.', 'bot');
+                    }
+                });
+            }
+
+            function addMessage(message, sender) {
+                var messageHtml = '<div class="message ' + sender + '">' +
+                    '<div class="message-content">' + message + '</div>' +
+                    '</div>';
+                $('#chatMessages').append(messageHtml);
+                $('#chatMessages').scrollTop($('#chatMessages')[0].scrollHeight);
+            }
         })
     </script>
 } 
