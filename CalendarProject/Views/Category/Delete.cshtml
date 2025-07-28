@@ -1,0 +1,78 @@
+﻿@model CalendarProject.Entities.Category
+
+@{
+    ViewBag.Title = "Kategori Sil";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12">
+                <h1>Kategori Sil</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-danger">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-exclamation-triangle"></i> 
+                            Silme Onayı
+                        </h3>
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="alert alert-danger">
+                            <h5><i class="fas fa-ban"></i> Bu kategoriyi silmek istediğinizden emin misiniz?</h5>
+                            <p>Bu işlem geri alınamaz ve kategoriye ait tüm etkinlikler de silinecektir.</p>
+                        </div>
+
+                        <dl class="row">
+                            <dt class="col-sm-3">Kategori ID:</dt>
+                            <dd class="col-sm-9">@Model.Id</dd>
+
+                            <dt class="col-sm-3">Kategori Adı:</dt>
+                            <dd class="col-sm-9">@Model.Name</dd>
+
+                            <dt class="col-sm-3">Açıklama:</dt>
+                            <dd class="col-sm-9">@Model.Description</dd>
+
+                            <dt class="col-sm-3">Renk:</dt>
+                            <dd class="col-sm-9">
+                                <span class="badge" style="background-color: @Model.Color; color: white;">
+                                    @Model.Color
+                                </span>
+                            </dd>
+                        </dl>
+                    </div>
+                    
+                    <div class="card-footer">
+                        @using (Html.BeginForm())
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.HiddenFor(model => model.Id)
+                            @Html.HiddenFor(model => model.Name)
+                            @Html.HiddenFor(model => model.Description)
+                            @Html.HiddenFor(model => model.Color)
+                            
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash"></i> Evet, Kategoriyi Sil
+                            </button>
+                            <a href="@Url.Action("Index")" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> İptal
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

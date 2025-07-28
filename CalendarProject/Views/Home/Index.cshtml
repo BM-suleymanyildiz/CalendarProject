@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Ana Sayfa";
+}
+
+<main>
+    <section class="row" aria-labelledby="aspnetTitle">
+        <h1 id="title">Takvim Projesi</h1>
+        <p class="lead">Bu proje, etkinliklerinizi yönetmek ve takvim üzerinde görüntülemek için geliştirilmiş bir web uygulamasıdır.</p>
+        <p><a href="@Url.Action("Index", "Calendar")" class="btn btn-primary btn-md">Takvimi Görüntüle &raquo;</a></p>
+    </section>
+
+    <div class="row">
+        <section class="col-md-4" aria-labelledby="gettingStartedTitle">
+            <h2 id="gettingStartedTitle">Başlangıç</h2>
+            <p>
+                Takvim sayfasından etkinliklerinizi görüntüleyebilir, yeni etkinlikler oluşturabilir
+                ve mevcut etkinliklerinizi düzenleyebilirsiniz.
+            </p>
+            <p><a class="btn btn-outline-dark" href="@Url.Action("Index", "Calendar")">Takvimi Aç &raquo;</a></p>
+        </section>
+        <section class="col-md-4" aria-labelledby="librariesTitle">
+            <h2 id="librariesTitle">Kategoriler</h2>
+            <p>Etkinliklerinizi kategorilere ayırarak daha düzenli bir şekilde yönetebilirsiniz. Her kategori için farklı renkler kullanabilirsiniz.</p>
+            <p><a class="btn btn-outline-dark" href="@Url.Action("Index", "Category")">Kategorileri Yönet &raquo;</a></p>
+        </section>
+        <section class="col-md-4" aria-labelledby="hostingTitle">
+            <h2 id="hostingTitle">Etkinlik Yönetimi</h2>
+            <p>Etkinliklerinizi kolayca oluşturabilir, düzenleyebilir ve silebilirsiniz. Sürükle-bırak özelliği ile etkinliklerinizi takvimde taşıyabilirsiniz.</p>
+            <p><a class="btn btn-outline-dark" href="@Url.Action("Index", "Calendar")">Etkinlikleri Yönet &raquo;</a></p>
+        </section>
+    </div>
+</main>

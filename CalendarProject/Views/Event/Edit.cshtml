@@ -1,0 +1,235 @@
+@model CalendarProject.Entities.Event
+@{
+    ViewBag.Title = "Etkinlik Düzenle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Etkinlik Düzenle</h1>
+            </div>
+
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-warning">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-edit"></i> Etkinlik Bilgilerini Düzenle
+                        </h3>
+                    </div>
+                    
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(model => model.Id)
+                        
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Title, "Etkinlik Başlığı", new { @class = "control-label" })
+                                        @Html.TextBoxFor(model => model.Title, new { @class = "form-control", placeholder = "Etkinlik başlığını giriniz" })
+                                        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                
+                                                                 <div class="col-md-6">
+                                     <div class="form-group">
+                                         @Html.LabelFor(model => model.CategoryId, "Kategori", new { @class = "control-label" })
+                                                                                   @if (ViewBag.Categories != null)
+                                          {
+                                              @Html.DropDownList("CategoryId", (SelectList)ViewBag.Categories, "Kategori seçiniz", new { @class = "form-control" })
+                                          }
+                                         else
+                                         {
+                                             <div class="alert alert-warning">
+                                                 <i class="fas fa-exclamation-triangle"></i> Henüz kategori eklenmemiş. 
+                                                 <a href="@Url.Action("Create", "Category")" class="alert-link">Önce kategori ekleyin.</a>
+                                             </div>
+                                         }
+                                         @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
+                                     </div>
+                                 </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.StartDate, "Başlangıç Tarihi", new { @class = "control-label" })
+                                        @Html.TextBoxFor(model => model.StartDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                                        @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.EndDate, "Bitiş Tarihi", new { @class = "control-label" })
+                                        @Html.TextBoxFor(model => model.EndDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                                        @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Description, "Açıklama", new { @class = "control-label" })
+                                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows = "4", placeholder = "Etkinlik açıklamasını giriniz" })
+                                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox">
+                                            @Html.CheckBoxFor(model => model.IsAllDay, new { @class = "custom-control-input" })
+                                            <label class="custom-control-label" for="IsAllDay">
+                                                Tüm gün etkinlik
+                                            </label>
+                                        </div>
+                                        <small class="form-text text-muted">Bu seçenek işaretlenirse, etkinlik tüm gün sürecektir.</small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Mevcut Etkinlik Bilgileri -->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="alert alert-info">
+                                        <h5><i class="fas fa-info-circle"></i> Mevcut Etkinlik Bilgileri</h5>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <strong>Etkinlik ID:</strong> #@Model.Id<br>
+                                                <strong>Oluşturulma Tarihi:</strong> @(Model.StartDate.HasValue ? Model.StartDate.Value.ToString("dd.MM.yyyy HH:mm") : "Tarih belirlenmedi")
+                                            </div>
+                                            <div class="col-md-6">
+                                                <strong>Kategori:</strong> 
+                                                <span class="badge" style="background-color: @(Model.Category?.Color ?? "#3c8dbc"); color: white;">
+                                                    @(Model.Category?.Name ?? "Kategorisiz")
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-warning">
+                                        <i class="fas fa-save"></i> Güncelle
+                                    </button>
+                                    <a href="@Url.Action("Index")" class="btn btn-secondary">
+                                        <i class="fas fa-arrow-left"></i> Geri Dön
+                                    </a>
+                                    <a href="@Url.Action("Delete", new { id = Model.Id })" class="btn btn-danger float-right">
+                                        <i class="fas fa-trash"></i> Sil
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    
+    <script>
+        $(document).ready(function() {
+            // Tüm gün checkbox'ı değiştiğinde
+            $('#IsAllDay').change(function() {
+                // Artık her zaman sadece tarih kullanıyoruz
+                // Bu fonksiyon şimdilik boş bırakıldı
+            });
+            
+            // Başlangıç tarihi değiştiğinde bitiş tarihini güncelle
+            $('#StartDate').change(function() {
+                var startDate = $(this).val();
+                if (startDate) {
+                    $('#EndDate').val(startDate);
+                }
+            });
+            
+            // Form gönderilmeden önce validasyon
+            $('form').submit(function(e) {
+                var startDate = new Date($('#StartDate').val());
+                var endDate = new Date($('#EndDate').val());
+                
+                if (endDate <= startDate) {
+                    alert('Bitiş tarihi başlangıç tarihinden sonra olmalıdır!');
+                    e.preventDefault();
+                    return false;
+                }
+            });
+            
+            
+        });
+    </script>
+}
+
+@section Styles {
+    <style>
+        .custom-control-input:checked ~ .custom-control-label::before {
+            background-color: #ffc107;
+            border-color: #ffc107;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .card-footer {
+            background-color: rgba(0,0,0,.03);
+            border-top: 1px solid rgba(0,0,0,.125);
+        }
+        
+        .btn {
+            margin-right: 10px;
+        }
+        
+        .text-danger {
+            color: #dc3545 !important;
+        }
+        
+        .form-text {
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+        
+        .alert-info {
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+            color: #0c5460;
+        }
+        
+        .alert-info h5 {
+            color: #0c5460;
+            margin-bottom: 10px;
+        }
+        
+        .badge {
+            font-size: 0.75rem;
+        }
+        
+        .float-right {
+            float: right !important;
+        }
+    </style>
+} 

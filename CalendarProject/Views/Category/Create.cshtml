@@ -1,0 +1,71 @@
+﻿@model CalendarProject.Entities.Category
+
+@{
+    ViewBag.Title = "Kategori Ekle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12">
+                <h1>Yeni Kategori Ekle</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Kategori Bilgileri</h3>
+                    </div>
+                    
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        
+                        <div class="card-body">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Name, "Kategori Adı", new { @class = "control-label" })
+                                @Html.TextBoxFor(model => model.Name, new { @class = "form-control", placeholder = "Kategori adını giriniz" })
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Description, "Açıklama", new { @class = "control-label" })
+                                @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows = "3", placeholder = "Kategori açıklamasını giriniz" })
+                                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Color, "Renk", new { @class = "control-label" })
+                                @Html.TextBoxFor(model => model.Color, new { @class = "form-control", type = "color", value = "#007bff" })
+                                @Html.ValidationMessageFor(model => model.Color, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Kategori Ekle
+                            </button>
+                            <a href="@Url.Action("Index")" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Geri Dön
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
